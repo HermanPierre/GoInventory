@@ -17,3 +17,20 @@ export const getProducts = async (productId: number | undefined) => {
         throw error;
     }
 };
+
+export const createProduct = async (newProduct: Product) => {
+    try {
+        console.log(newProduct)
+        const url = `${config.API_URL}/products`;
+
+        const response = await axios.post<Product>(url, newProduct, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
