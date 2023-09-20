@@ -4,10 +4,23 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
+	_ "github.com/gorilla/mux"
 	"goinventory/products"
 	"net/http"
 	"os"
 )
+
+// Mise en place du CORS
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func connectToDatabase() (*sql.DB, error) {
 	// Paramètres de connexion à la base de données MySQL
@@ -36,15 +49,18 @@ func connectToDatabase() (*sql.DB, error) {
 
 func main() {
 	db, err := connectToDatabase()
-	fmt.Printf("%s", err)
-	db.Ping()
+	if err != nil {
+		fmt.Println("Impossible de se connecter à la base de données")
+	}
 
-	products.ProductRoutes(db)
+	router := mux.NewRouter()
+	router.Use(corsMiddleware)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, world!")
-	})
+	router.HandleFunc("/products", func(w http.ResponseWriter, r *http.Request) {
+		products.ProductRoutesGet(db, w, r)
+	}).Methods("GET")
 
 	fmt.Println("Server is running on :8080")
+	http.Handle("/", router)
 	http.ListenAndServe(":8080", nil)
 }
