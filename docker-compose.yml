@@ -9,15 +9,11 @@ services:
       - ./go:/app
     ports:
       - "8080:8080"
-    command: go run main.go
+    command: go run .
     depends_on:
       - db
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - MYSQL_USER=MrRobot
-      - MYSQL_PASSWORD=mysafepassword
-      - MYSQL_DB=goinventory
+    env_file:
+      - env_dev.env
     networks:
       - goinventory_network
 
@@ -44,8 +40,19 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: mysafepassword
-      MYSQL_DATABASE: goinventory
-      MYSQL_USER: MrRobot
+    networks:
+      - goinventory_network
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+
+  # Service phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
     networks:
       - goinventory_network
 
