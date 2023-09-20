@@ -1,0 +1,54 @@
+version: '3'
+services:
+  # Serveur API Go
+  api:
+    image: golang:latest
+    container_name: go_api
+    working_dir: /app
+    volumes:
+      - ./go:/app
+    ports:
+      - "8080:8080"
+    command: go run main.go
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=MrRobot
+      - MYSQL_PASSWORD=mysafepassword
+      - MYSQL_DB=goinventory
+    networks:
+      - goinventory_network
+
+  # Front-end React
+  frontend:
+    image: node:latest
+    container_name: react_frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    depends_on:
+      - api
+    networks:
+      - goinventory_network
+
+  # Base de données MySQL
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysafepassword
+      MYSQL_DATABASE: goinventory
+      MYSQL_USER: MrRobot
+    networks:
+      - goinventory_network
+
+networks:
+  goinventory_network:
+    driver: bridge
