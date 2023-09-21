@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Vérifier si le dossier node_modules existe dans le répertoire frontend
+if [ ! -d "frontend/node_modules" ]; then
+  # S'il n'existe pas, exécuter npm install dans le répertoire frontend
+  echo "Le dossier 'node_modules' n'existe pas. Exécution de 'npm install' dans le répertoire frontend..."
+  (cd frontend && npm install && cd -)
+fi
+
+# Lancer Docker Compose
+echo "Lancement de Docker Compose..."
+docker-compose up -d
