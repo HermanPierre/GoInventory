@@ -14,7 +14,6 @@ import (
 // Mise en place du CORS
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf(r.Method)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
@@ -68,6 +67,8 @@ func main() {
 			products.AddProduct(db, w, r)
 		} else if r.Method == http.MethodPut {
 			products.UpdateProduct(db, w, r)
+		} else if r.Method == http.MethodDelete {
+			products.DeleteProduct(db, w, r)
 		}
 	})
 
