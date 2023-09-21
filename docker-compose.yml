@@ -56,6 +56,22 @@ services:
     networks:
       - goinventory_network
 
+  # Service keycloack
+  keycloak:
+    image: jboss/keycloak
+    container_name: keycloak
+    ports:
+      - "8082:8080"
+    environment:
+      KEYCLOAK_USER: root
+      KEYCLOAK_PASSWORD: mysafepassword
+    depends_on:
+      - db
+    volumes:
+      - ./keycloack:/opt/jboss/keycloak/standalone/data
+    networks:
+      - goinventory_network
+
 networks:
   goinventory_network:
     driver: bridge
