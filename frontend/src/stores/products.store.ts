@@ -23,7 +23,6 @@ const useGoInventoryStore = create<GoInventoryStore>((set, get) => ({
     setProducts: (newProducts) => set({ products: newProducts }),
     fillProducts: async () => {
         const categoryId = get().selectedCategoryId
-        console.log(categoryId)
         try {
             const products = await getProducts({categoryId});
             set({ products });

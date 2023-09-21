@@ -10,6 +10,7 @@ import (
 	"goinventory/products"
 	"net/http"
 	"os"
+	"time"
 )
 
 // Mise en place du CORS
@@ -34,19 +35,36 @@ func connectToDatabase() (*sql.DB, error) {
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
 
-	fmt.Printf("%s:%s@tcp(%s)/%s", username, password, dbUrl, dbname)
-	// Créer la chaîne de connexion
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, dbUrl, dbname)
+	var db *sql.DB
+	var err error
+	maxAttempts := 15
+	attempts := 0
 
-	// Se connecter à la base de données
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		return nil, err
-	}
+	for attempts < maxAttempts {
+		fmt.Printf("%s:%s@tcp(%s)/%s", username, password, dbUrl, dbname)
+		// Créer la chaîne de connexion
+		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, dbUrl, dbname)
 
-	// Vérifier la connexion à la base de données
-	if err := db.Ping(); err != nil {
-		return nil, err
+		// Se connecter à la base de données
+		db, err = sql.Open("mysql", dsn)
+		if err != nil {
+			attempts++
+			fmt.Println("Impossible de se connecter à la base de données. Réessai dans 2 secondes...")
+			time.Sleep(2 * time.Second) // Pause de 2 secondes avant la prochaine tentative
+			continue
+		}
+
+		// Vérifier la connexion à la base de données
+		if err := db.Ping(); err != nil {
+			attempts++
+			fmt.Println("Échec de la vérification de la connexion à la base de données. Réessai dans 2 secondes...")
+			db.Close()
+			time.Sleep(2 * time.Second) // Pause de 2 secondes avant la prochaine tentative
+			continue
+		}
+
+		fmt.Println("Connecté à la base de données :) ")
+		break
 	}
 
 	return db, nil

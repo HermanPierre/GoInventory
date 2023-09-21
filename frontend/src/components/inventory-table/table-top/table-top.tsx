@@ -12,9 +12,6 @@ const TableTop = () => {
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
-        // const selectedCategory = categories.find(cat => cat.category_id = selectedValue)
-        console.log({categories})
-        console.log({selectedValue})
         setSelectedCategoryId(selectedValue != 0 ? selectedValue : undefined);
         fillProducts();
     };
