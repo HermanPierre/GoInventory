@@ -7,27 +7,36 @@ import {getAllCategories} from "../services/categories.service";
 interface GoInventoryStore {
     products: Product[];
     categories: Category[];
-    selectedCategory: Category | undefined;
-    setSelectedCategory: (category: Category | undefined) => void,
+    selectedCategoryId: number | undefined;
+    setSelectedCategoryId: (category: number | undefined) => void,
     setProducts: (newProducts: Product[]) => void;
-    fillStore: () => Promise<void>;
+    fillProducts: () => Promise<void>;
+    fillCategories: () => Promise<void>;
     deleteProductFromStore: (productId: number) =>  void;
 }
 
 const useGoInventoryStore = create<GoInventoryStore>((set, get) => ({
     products: [],
     categories: [],
-    selectedCategory: undefined,
-    setSelectedCategory: (category) => set({ selectedCategory: category }),
+    selectedCategoryId: undefined,
+    setSelectedCategoryId: (category) => set({ selectedCategoryId: category }),
     setProducts: (newProducts) => set({ products: newProducts }),
-    fillStore: async () => {
-        const selectedCategory = get().selectedCategory
+    fillProducts: async () => {
+        const categoryId = get().selectedCategoryId
+        console.log(categoryId)
         try {
-            const products = await getProducts({categoryId: selectedCategory?.category_id});
-            const categories = await getAllCategories();
-            set({ products, categories });
+            const products = await getProducts({categoryId});
+            set({ products });
         } catch (error) {
-            console.error('Une erreur s\'est produite lors du remplissage du store :', error);
+            console.error('Une erreur s\'est produite lors du remplissage des produits dans le store :', error);
+        }
+    },
+    fillCategories: async () => {
+        try {
+            const categories = await getAllCategories();
+            set({ categories });
+        } catch (error) {
+            console.error('Une erreur s\'est produite lors du remplissage des categories dans le store :', error);
         }
     },
     deleteProductFromStore: (productId) => {
