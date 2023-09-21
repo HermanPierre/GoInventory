@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import TableTop from "./table-top/table-top";
 import TableRow from "./table-row/table-row";
+import useGoInventoryStore from "../../stores/products.store";
 import ProductModal from "../product-modal/product-modal";
-import useProductStore from "../../stores/products.store";
 
 const InventoryTable = () => {
-    const products = useProductStore((state) => state.products);
+    const {products, fillStore} = useGoInventoryStore((state) => state);
     const [accordionOpened, setAccordionOpened] = useState<number>();
     const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
 
-    const toggleModal = () => {
-        if (!isModalOpen)
-            useProductStore.getState().initializeProducts();
+    const toggleModal = async () => {
+        if (isModalOpen) {
+            await fillStore();
+        }
         setIsModalOpen(!isModalOpen);
     }
     const toggleAccordion = (index: number) => {
@@ -19,7 +20,7 @@ const InventoryTable = () => {
     };
 
     useEffect(() => {
-        useProductStore.getState().initializeProducts();
+        fillStore();
     }, [])
 
     return (

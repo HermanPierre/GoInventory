@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import SemiBoldTitle from "../../../shared/SemiboldTitle";
 import {Product} from "../../../types/product";
-import useProductStore from "../../../stores/products.store";
+import useGoInventoryStore from "../../../stores/products.store";
 import ProductModal from "../../product-modal/product-modal";
 import {deleteProduct} from "../../../services/products.service";
 
@@ -11,7 +11,7 @@ interface ProductDetailsType {
 
 const ProductDetails = ({product}: ProductDetailsType) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
-    const {initializeProducts, deleteProductFromStore} = useProductStore((state) => state);
+    const {fillStore, deleteProductFromStore} = useGoInventoryStore((state) => state);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -25,7 +25,7 @@ const ProductDetails = ({product}: ProductDetailsType) => {
 
     useEffect(() => {
         if (!isModalOpen)
-            initializeProducts()
+            fillStore()
     }, [isModalOpen]);
 
     return (

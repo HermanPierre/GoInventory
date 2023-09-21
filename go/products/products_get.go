@@ -76,7 +76,7 @@ func getAllProducts(db *sql.DB, categoryParam string) ([]Product, error) {
 	var args []interface{}
 	if categoryParam != "" {
 		// Si un filtre de catégorie est spécifié, on ajoute une clause WHERE à la requête SQL
-		query += " WHERE category_id = ?"
+		query += " WHERE p.category_id = ?"
 		categoryID, _ := strconv.Atoi(categoryParam)
 		args = append(args, categoryID)
 	}
