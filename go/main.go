@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	_ "github.com/gorilla/mux"
+	"goinventory/categories"
 	"goinventory/products"
 	"net/http"
 	"os"
@@ -69,6 +70,18 @@ func main() {
 			products.UpdateProduct(db, w, r)
 		} else if r.Method == http.MethodDelete {
 			products.DeleteProduct(db, w, r)
+		}
+	})
+
+	router.HandleFunc("/categories", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			categories.GetAllCategories(db, w)
+		} else if r.Method == http.MethodPost {
+			//products.AddProduct(db, w, r)
+		} else if r.Method == http.MethodPut {
+			//products.UpdateProduct(db, w, r)
+		} else if r.Method == http.MethodDelete {
+			//products.DeleteProduct(db, w, r)
 		}
 	})
 
