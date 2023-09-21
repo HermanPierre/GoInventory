@@ -42,3 +42,15 @@ export const updateProduct = async (updatedProduct: Product) => {
         throw error;
     }
 };
+
+export const deleteProduct = async (productId: number) => {
+    try {
+        const url = `${config.API_URL}/products?product_id=${productId}`;
+
+        const response = await axios.delete(url);
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

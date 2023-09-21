@@ -6,6 +6,7 @@ interface ProductStore {
     products: Product[];
     setProducts: (newProducts: Product[]) => void;
     initializeProducts: () => Promise<void>;
+    deleteProductFromStore: (productId: number) =>  void;
 }
 
 const useProductStore = create<ProductStore>((set) => ({
@@ -18,6 +19,12 @@ const useProductStore = create<ProductStore>((set) => ({
         } catch (error) {
             console.error('Une erreur s\'est produite lors de l\'initialisation des produits :', error);
         }
+    },
+    deleteProductFromStore: (productId) => {
+        set((state) => {
+            const updatedProducts = state.products.filter((product) => product.product_id !== productId);
+            return { products: updatedProducts };
+        });
     },
 }));
 
