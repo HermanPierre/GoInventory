@@ -66,6 +66,8 @@ func main() {
 			products.ProductRoutesGet(db, w, r)
 		} else if r.Method == http.MethodPost {
 			products.AddProduct(db, w, r)
+		} else if r.Method == http.MethodPut {
+			products.UpdateProduct(db, w, r)
 		}
 	})
 

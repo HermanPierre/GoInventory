@@ -8,9 +8,7 @@ function App() {
             <div className={'flex justify-center'}>
                 <h2 className={'text-4xl font-bold'}>GoInventory™</h2>
             </div>
-            <div className={'flex-1 flex justify-center items-center'}>
-                <InventoryTable/>
-            </div>
+            <InventoryTable/>
         </div>
     );
 }
