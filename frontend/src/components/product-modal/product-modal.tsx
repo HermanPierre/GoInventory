@@ -1,46 +1,64 @@
 import React, {useState} from 'react';
 import {Product} from "../../types/product";
+import {createProduct, updateProduct} from "../../services/products.service";
 
 interface ProductModalType {
     close: () => void
-    addNewProduct: (newProduct: Product) => void
+    productToUpdate?: Product | undefined
 }
-const ProductModal = ({close, addNewProduct}: ProductModalType) => {
-    const categories = [
-        { id: 1, name: 'Catégorie 1' },
-        { id: 2, name: 'Catégorie 2' },
-        { id: 3, name: 'Catégorie 3' },
-        { id: 4, name: 'Catégorie 4' },
-    ];
+
+const categories = [
+    {id: 1, name: 'Catégorie 1'},
+    {id: 2, name: 'Catégorie 2'},
+    {id: 3, name: 'Catégorie 3'},
+    {id: 4, name: 'Catégorie 4'},
+];
+
+const ProductModal = ({close, productToUpdate}: ProductModalType) => {
 
     const initialProductState: Product = {
-        name: '',
-        description: '',
-        category_id: 1,
-        quantity: 1,
+        name: productToUpdate?.name || '',
+        description: productToUpdate?.description || '',
+        category_id: productToUpdate?.category_id || 1,
+        quantity: productToUpdate?.quantity || 1,
     };
 
-    const [newProduct, setNewProduct] = useState<Product>(initialProductState);
+    const [product, setProduct] = useState<Product>(initialProductState);
+
+
+    const addNewProduct = async () => {
+        await createProduct(product);
+        setProduct(initialProductState);
+        close()
+    }
+
+    const updateSelectedProduct = async () => {
+        await updateProduct({product_id: productToUpdate?.product_id, ...product});
+        setProduct(initialProductState);
+        close()
+    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setNewProduct({ ...newProduct, [name]: value });
+        setProduct({ ...product, [name]: value });
     };
 
     const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setNewProduct({ ...newProduct, [name]: Number(value) });
+        setProduct({ ...product, [name]: Number(value) });
     };
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const categoryId = parseInt(e.target.value);
-        setNewProduct({ ...newProduct, category_id: categoryId });
+        setProduct({ ...product, category_id: categoryId });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        addNewProduct(newProduct);
-        setNewProduct(initialProductState);
+        if (productToUpdate)
+            await updateSelectedProduct()
+        else
+            await addNewProduct();
     };
 
     return (
@@ -53,7 +71,7 @@ const ProductModal = ({close, addNewProduct}: ProductModalType) => {
                         <input
                             type="text"
                             name="name"
-                            value={newProduct.name}
+                            value={product.name}
                             onChange={handleInputChange}
                             className="border rounded w-full p-2"
                             required
@@ -63,7 +81,7 @@ const ProductModal = ({close, addNewProduct}: ProductModalType) => {
                         <label className="block text-sm font-medium text-gray-700">Description</label>
                         <textarea
                             name="description"
-                            value={newProduct.description}
+                            value={product.description}
                             onChange={handleInputChange}
                             className="border rounded w-full p-2"
                             rows={3}
@@ -75,7 +93,7 @@ const ProductModal = ({close, addNewProduct}: ProductModalType) => {
                         <input
                             type="number"
                             name="quantity"
-                            value={newProduct.quantity}
+                            value={product.quantity}
                             onChange={handleQuantityChange}
                             className="border rounded w-full p-2"
                             min="1"
@@ -86,7 +104,7 @@ const ProductModal = ({close, addNewProduct}: ProductModalType) => {
                         <label className="block text-sm font-medium text-gray-700">Catégorie</label>
                         <select
                             name="category_id"
-                            value={newProduct.category_id}
+                            value={product.category_id}
                             onChange={handleCategoryChange}
                             className="border rounded w-full p-2"
                             required
@@ -103,7 +121,7 @@ const ProductModal = ({close, addNewProduct}: ProductModalType) => {
                             type="submit"
                             className="bg-blue-500 text-white px-4 py-2 rounded"
                         >
-                            Ajouter
+                            {productToUpdate ? 'Editer' : 'Ajouter'}
                         </button>
                     </div>
                 </form>

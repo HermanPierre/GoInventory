@@ -23,11 +23,19 @@ export const createProduct = async (newProduct: Product) => {
         console.log(newProduct)
         const url = `${config.API_URL}/products`;
 
-        const response = await axios.post<Product>(url, newProduct, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await axios.post<Product>(url, newProduct);
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const updateProduct = async (updatedProduct: Product) => {
+    try {
+        const url = `${config.API_URL}/products`;
+
+        const response = await axios.put<Product>(url, updatedProduct);
 
         return response.data;
     } catch (error) {
