@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import SemiBoldTitle from "../../../shared/SemiboldTitle";
 import {Product} from "../../../types/product";
-import ProductModal from "../../product-modal/product-modal";
 import useProductStore from "../../../stores/products.store";
+import ProductModal from "../../product-modal/product-modal";
+import {deleteProduct} from "../../../services/products.service";
 
 interface ProductDetailsType {
     product: Product
@@ -10,10 +11,16 @@ interface ProductDetailsType {
 
 const ProductDetails = ({product}: ProductDetailsType) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
-    const initializeProducts = useProductStore((state) => state.initializeProducts);
+    const {initializeProducts, deleteProductFromStore} = useProductStore((state) => state);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
+    }
+
+    const productDelete = async () => {
+        if (!product.product_id) return
+        await deleteProduct(product.product_id);
+        deleteProductFromStore(product.product_id)
     }
 
     useEffect(() => {
@@ -35,6 +42,7 @@ const ProductDetails = ({product}: ProductDetailsType) => {
                         Editer
                     </button>
                     <button
+                        onClick={productDelete}
                         className="bg-red-500 text-white font-semibold px-2 py-0.5 rounded self-end hover:bg-red-600">
                         Supprimer
                     </button>
