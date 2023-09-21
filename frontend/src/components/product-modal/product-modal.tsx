@@ -1,18 +1,12 @@
 import React, {useState} from 'react';
 import {Product} from "../../types/product";
 import {createProduct, updateProduct} from "../../services/products.service";
+import useGoInventoryStore from "../../stores/products.store";
 
 interface ProductModalType {
     close: () => void
     productToUpdate?: Product | undefined
 }
-
-const categories = [
-    {id: 1, name: 'Catégorie 1'},
-    {id: 2, name: 'Catégorie 2'},
-    {id: 3, name: 'Catégorie 3'},
-    {id: 4, name: 'Catégorie 4'},
-];
 
 const ProductModal = ({close, productToUpdate}: ProductModalType) => {
 
@@ -24,6 +18,7 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
     };
 
     const [product, setProduct] = useState<Product>(initialProductState);
+    const {categories} = useGoInventoryStore((state) => state)
 
 
     const addNewProduct = async () => {
@@ -33,6 +28,7 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
     }
 
     const updateSelectedProduct = async () => {
+        if (!productToUpdate) return
         await updateProduct({product_id: productToUpdate?.product_id, ...product});
         setProduct(initialProductState);
         close()
@@ -110,8 +106,8 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
                             required
                         >
                             {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
+                                <option key={category.category_id} value={category.category_id}>
+                                    {category.category_name}
                                 </option>
                             ))}
                         </select>

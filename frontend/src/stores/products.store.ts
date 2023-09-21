@@ -1,23 +1,33 @@
 import {create} from 'zustand';
 import { getProducts } from '../services/products.service';
 import {Product} from "../types/product";
+import {Category} from "../types/categories";
+import {getAllCategories} from "../services/categories.service";
 
-interface ProductStore {
+interface GoInventoryStore {
     products: Product[];
+    categories: Category[];
+    selectedCategory: Category | undefined;
+    setSelectedCategory: (category: Category | undefined) => void,
     setProducts: (newProducts: Product[]) => void;
-    initializeProducts: () => Promise<void>;
+    fillStore: () => Promise<void>;
     deleteProductFromStore: (productId: number) =>  void;
 }
 
-const useProductStore = create<ProductStore>((set) => ({
+const useGoInventoryStore = create<GoInventoryStore>((set, get) => ({
     products: [],
+    categories: [],
+    selectedCategory: undefined,
+    setSelectedCategory: (category) => set({ selectedCategory: category }),
     setProducts: (newProducts) => set({ products: newProducts }),
-    initializeProducts: async () => {
+    fillStore: async () => {
+        const selectedCategory = get().selectedCategory
         try {
-            const data = await getProducts(undefined);
-            set({ products: data });
+            const products = await getProducts({categoryId: selectedCategory?.category_id});
+            const categories = await getAllCategories();
+            set({ products, categories });
         } catch (error) {
-            console.error('Une erreur s\'est produite lors de l\'initialisation des produits :', error);
+            console.error('Une erreur s\'est produite lors du remplissage du store :', error);
         }
     },
     deleteProductFromStore: (productId) => {
@@ -28,4 +38,4 @@ const useProductStore = create<ProductStore>((set) => ({
     },
 }));
 
-export default useProductStore;
+export default useGoInventoryStore;

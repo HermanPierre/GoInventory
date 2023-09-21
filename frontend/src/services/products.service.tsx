@@ -2,7 +2,11 @@ import axios from 'axios';
 import config from "../config";
 import {Product} from "../types/product";
 
-export const getProducts = async (productId: number | undefined) => {
+interface getProductQuery {
+    productId?: number | undefined
+    categoryId?: number | undefined
+}
+export const getProducts = async ({productId, categoryId}: getProductQuery) => {
     try {
         let url = `${config.API_URL}/products`;
 
@@ -10,9 +14,13 @@ export const getProducts = async (productId: number | undefined) => {
             url += `?productId=${productId}`;
         }
 
+        if (categoryId) {
+            url += `?categoryId=${categoryId}`;
+        }
+
         const response = await axios.get<Product[]>(url);
 
-        return response.data;
+        return response.data || [];
     } catch (error) {
         throw error;
     }
