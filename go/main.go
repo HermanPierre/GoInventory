@@ -77,11 +77,9 @@ func main() {
 		if r.Method == http.MethodGet {
 			categories.GetAllCategories(db, w)
 		} else if r.Method == http.MethodPost {
-			//products.AddProduct(db, w, r)
-		} else if r.Method == http.MethodPut {
-			//products.UpdateProduct(db, w, r)
+			categories.CreateCategory(db, w, r)
 		} else if r.Method == http.MethodDelete {
-			//products.DeleteProduct(db, w, r)
+			categories.DeleteCategory(db, w, r)
 		}
 	})
 

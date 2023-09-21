@@ -5,23 +5,19 @@ import useGoInventoryStore from "../../stores/products.store";
 import ProductModal from "../product-modal/product-modal";
 
 const InventoryTable = () => {
-    const {products, fillStore} = useGoInventoryStore((state) => state);
+    const {products, fillProducts} = useGoInventoryStore((state) => state);
     const [accordionOpened, setAccordionOpened] = useState<number>();
-    const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleModal = async () => {
         if (isModalOpen) {
-            await fillStore();
+            await fillProducts();
         }
         setIsModalOpen(!isModalOpen);
     }
     const toggleAccordion = (index: number) => {
         setAccordionOpened(accordionOpened != index ? index : undefined);
     };
-
-    useEffect(() => {
-        fillStore();
-    }, [])
 
     return (
         <div className="flex flex-1 flex-col w-full justify-center items-center">
@@ -35,6 +31,7 @@ const InventoryTable = () => {
                                   onClick={() => toggleAccordion(index)}
                         />)
                 })}
+                {products.length === 0 && <div className={'text-center'}><span>Aucun produit...</span></div>}
             </div>
             <button onClick={toggleModal} className="bg-blue-500 text-white px-4 py-2 mt-4 rounded shadow-lg shadow-blue-500">
                 Ajouter un produit +

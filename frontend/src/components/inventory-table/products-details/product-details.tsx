@@ -11,7 +11,7 @@ interface ProductDetailsType {
 
 const ProductDetails = ({product}: ProductDetailsType) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
-    const {fillStore, deleteProductFromStore} = useGoInventoryStore((state) => state);
+    const {fillProducts, deleteProductFromStore} = useGoInventoryStore((state) => state);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -25,7 +25,7 @@ const ProductDetails = ({product}: ProductDetailsType) => {
 
     useEffect(() => {
         if (!isModalOpen)
-            fillStore()
+            fillProducts()
     }, [isModalOpen]);
 
     return (

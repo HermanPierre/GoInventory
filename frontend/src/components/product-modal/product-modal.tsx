@@ -9,16 +9,16 @@ interface ProductModalType {
 }
 
 const ProductModal = ({close, productToUpdate}: ProductModalType) => {
+    const {categories} = useGoInventoryStore((state) => state)
 
     const initialProductState: Product = {
         name: productToUpdate?.name || '',
         description: productToUpdate?.description || '',
-        category_id: productToUpdate?.category_id || 1,
+        category_id: productToUpdate?.category_id || categories[0].category_id,
         quantity: productToUpdate?.quantity || 1,
     };
 
     const [product, setProduct] = useState<Product>(initialProductState);
-    const {categories} = useGoInventoryStore((state) => state)
 
 
     const addNewProduct = async () => {
@@ -105,11 +105,11 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
                             className="border rounded w-full p-2"
                             required
                         >
-                            {categories.map((category) => (
-                                <option key={category.category_id} value={category.category_id}>
+                            {categories.map(((category, index) => (
+                                <option key={index} value={category.category_id}>
                                     {category.category_name}
                                 </option>
-                            ))}
+                            )))}
                         </select>
                     </div>
                     <div className="mb-4">

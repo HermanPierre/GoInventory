@@ -12,3 +12,25 @@ export const getAllCategories = async () => {
         throw error;
     }
 };
+
+export const createCategory = async (newCategoryName: string) => {
+    try {
+        let url = `${config.API_URL}/categories`;
+
+        const response = await axios.post<Category>(url, { category_name: newCategoryName });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteCategory = async (categoryId: number) => {
+    try {
+        let url = `${config.API_URL}/categories?category_id=${categoryId}`;
+
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
