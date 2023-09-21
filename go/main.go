@@ -14,9 +14,14 @@ import (
 // Mise en place du CORS
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf(r.Method)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
 
 		next.ServeHTTP(w, r)
 	})
@@ -57,8 +62,14 @@ func main() {
 	router.Use(corsMiddleware)
 
 	router.HandleFunc("/products", func(w http.ResponseWriter, r *http.Request) {
-		products.ProductRoutesGet(db, w, r)
-	}).Methods("GET")
+		if r.Method == http.MethodGet {
+			products.ProductRoutesGet(db, w, r)
+		} else if r.Method == http.MethodPost {
+			products.AddProduct(db, w, r)
+		} else if r.Method == http.MethodPut {
+			products.UpdateProduct(db, w, r)
+		}
+	})
 
 	fmt.Println("Server is running on :8080")
 	http.Handle("/", router)

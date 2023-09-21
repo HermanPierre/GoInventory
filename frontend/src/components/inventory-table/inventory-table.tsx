@@ -1,41 +1,44 @@
 import React, {useEffect, useState} from 'react';
 import TableTop from "./table-top/table-top";
 import TableRow from "./table-row/table-row";
-import {Product} from "../../types/product";
-import {getProducts} from "../../services/products.service";
+import ProductModal from "../product-modal/product-modal";
+import useProductStore from "../../stores/products.store";
 
 const InventoryTable = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const products = useProductStore((state) => state.products);
     const [accordionOpened, setAccordionOpened] = useState<number>();
+    const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
 
+    const toggleModal = () => {
+        if (!isModalOpen)
+            useProductStore.getState().initializeProducts();
+        setIsModalOpen(!isModalOpen);
+    }
     const toggleAccordion = (index: number) => {
         setAccordionOpened(accordionOpened != index ? index : undefined);
     };
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const data = await getProducts(accordionOpened ? accordionOpened + 1 : undefined);
-                setProducts(data);
-            } catch (error) {
-                console.error('Une erreur s\'est produite lors de la récupération des produits :', error);
-            }
-        };
-
-        fetchProducts();
+        useProductStore.getState().initializeProducts();
     }, [])
 
     return (
-        <div className="overflow-x-auto overflow-y-scroll w-1/2 bg-white rounded shadow-lg h-1/2">
-            <TableTop/>
-            {products.map((product, index) => {
-                return (
-                    <TableRow key={index}
-                              product={product}
-                              isOpen={index === accordionOpened}
-                              onClick={() => toggleAccordion(index)}
-                    />)
-            })}
+        <div className="flex flex-1 flex-col w-full justify-center items-center">
+            <div className={'overflow-y-scroll bg-white rounded shadow-lg w-1/2 h-[60vh]'}>
+                <TableTop/>
+                {products.map((product, index) => {
+                    return (
+                        <TableRow key={index}
+                                  product={product}
+                                  isOpen={index === accordionOpened}
+                                  onClick={() => toggleAccordion(index)}
+                        />)
+                })}
+            </div>
+            <button onClick={toggleModal} className="bg-blue-500 text-white px-4 py-2 mt-4 rounded shadow-lg shadow-blue-500">
+                Ajouter un produit +
+            </button>
+            {isModalOpen && <ProductModal close={toggleModal} />}
         </div>
     );
 };
