@@ -64,6 +64,11 @@ func UpdateProduct(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := AddProductVersion(db, updatedProduct.ProductID); err != nil {
+		http.Error(w, "Erreur lors de l'ajout de la version précédente du produit", http.StatusInternalServerError)
+		return
+	}
+
 	updateQuery := `
 		UPDATE products
 		SET name = ?, description = ?, category_id = ?, quantity = ?, updated_at = NOW()

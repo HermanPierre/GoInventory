@@ -20,6 +20,12 @@ func DeleteProduct(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = db.Exec("DELETE FROM product_versions WHERE product_id = ?", productIDInt)
+	if err != nil {
+		http.Error(w, "Erreur lors de la suppression des versions du produit dans la base de données", http.StatusInternalServerError)
+		return
+	}
+
 	deleteQuery := `
 		DELETE FROM products
 		WHERE product_id = ?

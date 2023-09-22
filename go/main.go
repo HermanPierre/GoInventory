@@ -101,6 +101,12 @@ func main() {
 		}
 	})
 
+	router.HandleFunc("/versions", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			products.GetProductVersions(db, w, r)
+		}
+	})
+
 	fmt.Println("Server is running on :8080")
 	http.Handle("/", router)
 	http.ListenAndServe(":8080", nil)
