@@ -13,7 +13,6 @@ const CategoryModal = ({ close }: ProductModalType) => {
         if (newCategoryName.trim() === '') {
             return;
         }
-
         try {
             await createCategory(newCategoryName);
             await fillCategories();
@@ -40,6 +39,7 @@ const CategoryModal = ({ close }: ProductModalType) => {
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Nouvelle catégorie</label>
                     <input
+                        data-testid='input-cat'
                         type="text"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
@@ -47,6 +47,7 @@ const CategoryModal = ({ close }: ProductModalType) => {
                     />
                 </div>
                 <button
+                    data-testid='add-cat'
                     onClick={handleAddCategory}
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                 >
@@ -54,10 +55,12 @@ const CategoryModal = ({ close }: ProductModalType) => {
                 </button>
                 <ul className="mt-4">
                     {categories.map((category, index) => (
-                        <li key={index} className="flex justify-between items-center mb-2">
+                        <li key={index} data-testid={`cat-${index}`}
+                            className="flex justify-between items-center mb-2">
                             <span className={'text-gray-950'}>{category.category_name}</span>
                             <button
                                 onClick={() => handleDeleteCategory(category.category_id)}
+                                data-testid={`delete-${index}`}
                                 className="bg-red-500 text-white px-2 py-1 rounded"
                             >
                                 Supprimer
@@ -65,7 +68,9 @@ const CategoryModal = ({ close }: ProductModalType) => {
                         </li>
                     ))}
                 </ul>
-                <button onClick={close} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
+                <button data-testid="close-modal"
+                        onClick={close}
+                        className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
                     Fermer la modal
                 </button>
             </div>

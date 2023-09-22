@@ -26,6 +26,7 @@ const InventoryTable = () => {
                 {products.map((product, index) => {
                     return (
                         <TableRow key={index}
+                                  data-testid={`product-${index}`}
                                   product={product}
                                   isOpen={index === accordionOpened}
                                   onClick={() => toggleAccordion(index)}

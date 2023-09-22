@@ -10,7 +10,7 @@ Pour démarrer l'application, suivez ces étapes simples :
 
 2. Clonez ce dépôt sur votre machine en utilisant la commande suivante :
 
-`git clone <URL_DU_REPO>`
+`git clone https://github.com/HermanPierre/GoInventory.git`
 
 3. Accédez au répertoire du projet :
 
