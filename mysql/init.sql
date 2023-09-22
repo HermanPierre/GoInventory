@@ -22,6 +22,20 @@ CREATE TABLE products
     FOREIGN KEY (category_id) REFERENCES categories (category_id)
 );
 
+-- Créer la table des versions de produits
+CREATE TABLE product_versions
+(
+    version_id   INT AUTO_INCREMENT PRIMARY KEY,
+    product_id   INT,
+    name         VARCHAR(255) NOT NULL,
+    description  TEXT,
+    category_id  INT,
+    quantity     INT,
+    created_at   TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
+);
+
+
 -- Insérer quelques catégories par défaut
 INSERT INTO categories (name)
 VALUES ('Electronique'),

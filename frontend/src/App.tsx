@@ -11,7 +11,6 @@ function App() {
     useEffect(() => {
         const auth = keycloak.authenticated
         keycloak.init({checkLoginIframe: false, onLoad: 'login-required'}).then((authenticated) => {
-            console.log(authenticated)
             if (authenticated) {
                 setAuthentified(true)
                 fillProducts();

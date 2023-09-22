@@ -15,6 +15,12 @@ func DeleteCategory(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = db.Exec("DELETE FROM product_versions WHERE product_id IN (SELECT product_id FROM products WHERE category_id = ?)", categoryID)
+	if err != nil {
+		http.Error(w, "Erreur lors de la suppression des versions de produits liés à la catégorie", http.StatusInternalServerError)
+		return
+	}
+
 	_, err = db.Exec("DELETE FROM products WHERE category_id = ?", categoryID)
 	if err != nil {
 		http.Error(w, "Erreur lors de la suppression des produits liés à la catégorie", http.StatusInternalServerError)
