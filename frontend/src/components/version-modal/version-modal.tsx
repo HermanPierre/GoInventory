@@ -44,21 +44,23 @@ const VersionsModal = ({product, close}: VersionsModalType) => {
                     </li>
                 </ul>
                 <hr/>
-                <ul className="mt-4">
-                    {productVersions.map((version, index) => (
-                        <li key={index} data-testid={`version-${index}`} className="mb-2">
-                            <p className="text-gray-950 font-semibold">
-                                {`Version du ${version.created_at}:`}
-                            </p>
-                            <p className="text-gray-700">{`Nom: ${version.name}`}</p>
-                            <p className="text-gray-700">{`Description: ${version.description}`}</p>
-                            <p className="text-gray-700">{`Quantité: ${version.quantity}`}</p>
-                            <p className="text-gray-700">
-                                {`Catégorie: ${categories.find(cat => cat.category_id === version.category_id)?.category_name}`}
-                            </p>
-                        </li>
-                    ))}
-                </ul>
+                <div className="max-h-96 overflow-y-auto">
+                    <ul className="mt-4">
+                        {productVersions.map((version, index) => (
+                            <li key={index} data-testid={`version-${index}`} className="mb-2">
+                                <p className="text-gray-950 font-semibold">
+                                    {`Version du ${version.created_at}:`}
+                                </p>
+                                <p className="text-gray-700">{`Nom: ${version.name}`}</p>
+                                <p className="text-gray-700">{`Description: ${version.description}`}</p>
+                                <p className="text-gray-700">{`Quantité: ${version.quantity}`}</p>
+                                <p className="text-gray-700">
+                                    {`Catégorie: ${categories.find(cat => cat.category_id === version.category_id)?.category_name}`}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 {productVersions.length === 0 && <p className="text-gray-700">Aucune ancienne version du produit...</p>}
                 <button
                     data-testid="close-modal"
