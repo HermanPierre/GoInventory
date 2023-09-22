@@ -26,13 +26,15 @@ const TableTop = () => {
                 <h2 className={'font-bold text-l'}>Catégorie</h2>
                 <select className={'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded block w-1/2'}
                         defaultValue="1"
+                        data-testid='select-cat'
                         onChange={handleCategoryChange}>
                     <option value={'0'}>Aucune séléction</option>
                     {categories.map((category, index) => {
-                        return <option key={index} value={category.category_id}>{category.category_name}</option>
+                        return <option data-testid={`cat-${index}`} key={index} value={category.category_id}>{category.category_name}</option>
                     })}
                 </select>
                 <button
+                    data-testid='edit-cat'
                     className={'bg-blue-500 text-white text-sm px-3 py-1 rounded'}
                     onClick={toggleModal}
                 >
