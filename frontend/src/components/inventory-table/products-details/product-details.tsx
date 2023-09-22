@@ -4,17 +4,23 @@ import {Product} from "../../../types/product";
 import useGoInventoryStore from "../../../stores/products.store";
 import ProductModal from "../../product-modal/product-modal";
 import {deleteProduct} from "../../../services/products.service";
+import VersionsModal from "../../version-modal/version-modal";
 
 interface ProductDetailsType {
     product: Product
 }
 
 const ProductDetails = ({product}: ProductDetailsType) => {
-    const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler l'ouverture de la modal
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false); // État pour contrôler l'ouverture de la modal
+    const [isModalVersionOpen, setIsModalVersionOpen] = useState(false); // État pour contrôler l'ouverture de la modal
     const {fillProducts, deleteProductFromStore} = useGoInventoryStore((state) => state);
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
+    const toggleEditModal = () => {
+        setIsModalEditOpen(!isModalEditOpen);
+    }
+
+    const toggleVersionModal = () => {
+        setIsModalVersionOpen(!isModalVersionOpen);
     }
 
     const productDelete = async () => {
@@ -24,9 +30,9 @@ const ProductDetails = ({product}: ProductDetailsType) => {
     }
 
     useEffect(() => {
-        if (!isModalOpen)
+        if (!isModalEditOpen)
             fillProducts()
-    }, [isModalOpen]);
+    }, [isModalEditOpen]);
 
     return (
         <div className={'flex flex-col gap-1'}>
@@ -37,7 +43,12 @@ const ProductDetails = ({product}: ProductDetailsType) => {
                 </div>
                 <div className={'flex gap-1'}>
                     <button
-                        onClick={toggleModal}
+                        onClick={toggleVersionModal}
+                        className="bg-green-300 text-white font-semibold px-2 py-0.5 rounded self-end">
+                        🕘
+                    </button>
+                    <button
+                        onClick={toggleEditModal}
                         className="bg-gray-500 text-white font-semibold px-2 py-0.5 rounded self-end">
                         Editer
                     </button>
@@ -64,7 +75,8 @@ const ProductDetails = ({product}: ProductDetailsType) => {
                     <span>{product.category_name}</span>
                 </div>
             </div>
-            {isModalOpen && <ProductModal productToUpdate={product} close={toggleModal}/>}
+            {isModalEditOpen && <ProductModal productToUpdate={product} close={toggleEditModal}/>}
+            {isModalVersionOpen && <VersionsModal product={product} close={toggleVersionModal}/>}
         </div>
     );
 };

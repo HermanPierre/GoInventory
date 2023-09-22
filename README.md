@@ -29,6 +29,24 @@ Cette commande va construire les conteneurs Docker nécessaires, initialiser la 
 - Nom d'utilisateur : admin
 - Mot de passe : admin
 
+## 🧪 Exécution des Tests Frontend
+Pour exécuter les tests du frontend, suivez ces étapes supplémentaires :
+
+Accédez au répertoire du frontend :
+
+
+`cd frontend`
+
+Installez les dépendances npm en utilisant la commande suivante :
+
+`npm install`
+
+Lancez les tests avec la commande :
+
+`npm test`
+
+Cela exécutera les tests du frontend de l'application.
+
 ## 📂 Structure du Projet
 
 Voici un aperçu de la structure du projet GoInventory :
