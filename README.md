@@ -22,6 +22,7 @@ Pour démarrer l'application, suivez ces étapes simples :
 
 
 Cette commande va construire les conteneurs Docker nécessaires, initialiser la base de données et lancer l'application.
+En fonction de la puissance de votre machine l'application peut mettre plusieurs minutes à se lancer.
 
 5. Rendez-vous dans votre navigateur et accédez à l'adresse [http://localhost:3000](http://localhost:3000) pour utiliser GoInventory.
 

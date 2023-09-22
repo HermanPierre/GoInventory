@@ -47,6 +47,7 @@ func connectToDatabase() (*sql.DB, error) {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, dbUrl, dbname)
 
 		// Se connecter à la base de données
+		// Connexion à la base de données en plusieurs essais au cas où le docker mysql soit encore en processus de démarrage
 		db, err = sql.Open("mysql", dsn)
 		if err != nil {
 			attempts++
