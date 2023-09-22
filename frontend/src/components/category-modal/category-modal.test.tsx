@@ -60,7 +60,6 @@ describe('CategoryModal', () => {
 
         render(<CategoryModal close={closeMock}/>);
 
-        // Simulate categories being present
         fireEvent.change(screen.getByTestId('input-cat'), {
             target: {value: categoryName},
         });
@@ -70,7 +69,6 @@ describe('CategoryModal', () => {
             expect(screen.getByTestId('cat-3')).toHaveTextContent(categoryName);
         });
 
-        // Trigger delete
         fireEvent.click(screen.getByTestId('delete-3'));
 
         await waitFor(() => {
