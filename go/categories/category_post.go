@@ -23,6 +23,7 @@ func CreateCategory(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	// Encode la nouvelle catégorie en JSON et l'envoie en réponse
 	if err := json.NewEncoder(w).Encode(newCategory); err != nil {
 		http.Error(w, "Erreur lors de la sérialisation en JSON de la nouvelle catégorie", http.StatusInternalServerError)
 		return

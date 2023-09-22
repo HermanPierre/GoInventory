@@ -23,6 +23,7 @@ const ProductDetails = ({product}: ProductDetailsType) => {
         setIsModalVersionOpen(!isModalVersionOpen);
     }
 
+    // Gestion de la suppression d'un produit
     const productDelete = async () => {
         if (!product.product_id) return
         await deleteProduct(product.product_id);

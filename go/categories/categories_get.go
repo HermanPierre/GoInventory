@@ -13,6 +13,7 @@ type Category struct {
 }
 
 func GetAllCategories(db *sql.DB, w http.ResponseWriter) {
+	// Récupération des catégories en bdd
 	rows, err := db.Query("SELECT category_id, name FROM categories")
 	if err != nil {
 		http.Error(w, "Erreur lors de la requête à la base de données", http.StatusInternalServerError)
@@ -22,6 +23,7 @@ func GetAllCategories(db *sql.DB, w http.ResponseWriter) {
 
 	var categories []Category
 
+	// Parcours les résultats de la requête
 	for rows.Next() {
 		var category Category
 		if err := rows.Scan(&category.CategoryID, &category.CategoryName); err != nil {
@@ -36,6 +38,7 @@ func GetAllCategories(db *sql.DB, w http.ResponseWriter) {
 		return
 	}
 
+	// Encode les catégories en JSON et les envoie en réponse
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(categories); err != nil {
 		http.Error(w, "Erreur lors de la sérialisation en JSON des catégories", http.StatusInternalServerError)

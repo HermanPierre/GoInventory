@@ -56,6 +56,7 @@ func GetProductVersions(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Récupération des versions du produit
 	rows, err := db.Query("SELECT version_id, name, description, category_id, quantity, created_at FROM product_versions WHERE product_id = ? ORDER BY created_at DESC", productIDInt)
 	if err != nil {
 		http.Error(w, "Erreur lors de la récupération des versions du produit", http.StatusInternalServerError)
@@ -65,6 +66,7 @@ func GetProductVersions(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 
 	productVersions := []Product{}
 
+	// Lecture des versions
 	for rows.Next() {
 		var version Product
 		err := rows.Scan(

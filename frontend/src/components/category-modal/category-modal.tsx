@@ -9,6 +9,7 @@ const CategoryModal = ({ close }: ProductModalType) => {
     const [newCategoryName, setNewCategoryName] = useState('');
     const { categories, fillCategories, fillProducts } = useGoInventoryStore((state) => state);
 
+    // Fonction 'handleAddCategory' appelée lors de l'ajout d'une nouvelle catégorie
     const handleAddCategory = async () => {
         if (newCategoryName.trim() === '') {
             return;
@@ -22,6 +23,7 @@ const CategoryModal = ({ close }: ProductModalType) => {
         }
     };
 
+    // Fonction 'handleDeleteCategory' appelée lors de la suppression d'une catégorie existante
     const handleDeleteCategory = async (categoryId: number) => {
         try {
             await deleteCategory(categoryId);

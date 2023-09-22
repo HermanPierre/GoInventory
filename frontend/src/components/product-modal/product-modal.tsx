@@ -11,6 +11,7 @@ interface ProductModalType {
 const ProductModal = ({close, productToUpdate}: ProductModalType) => {
     const {categories} = useGoInventoryStore((state) => state)
 
+    // Définition de l'état initial d'un produit
     const initialProductState: Product = {
         name: productToUpdate?.name || '',
         description: productToUpdate?.description || '',
@@ -21,12 +22,14 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
     const [product, setProduct] = useState<Product>(initialProductState);
 
 
+    // Fonction 'addNewProduct' pour ajouter un nouveau produit
     const addNewProduct = async () => {
         await createProduct(product);
         setProduct(initialProductState);
         close()
     }
 
+    // Fonction 'updateSelectedProduct' pour mettre à jour un produit existant
     const updateSelectedProduct = async () => {
         if (!productToUpdate) return
         await updateProduct({product_id: productToUpdate?.product_id, ...product});
@@ -49,6 +52,7 @@ const ProductModal = ({close, productToUpdate}: ProductModalType) => {
         setProduct({ ...product, category_id: categoryId });
     };
 
+    // Gestionnaire d'envoi du formulaire
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (productToUpdate)

@@ -28,6 +28,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// Fonction pour se connecter à la base de données MySQL
 func connectToDatabase() (*sql.DB, error) {
 	// Paramètres de connexion à la base de données MySQL
 	username := os.Getenv("DB_USER")
@@ -79,6 +80,7 @@ func main() {
 	router := mux.NewRouter()
 	router.Use(corsMiddleware)
 
+	// Gérer les routes des produits
 	router.HandleFunc("/products", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			products.ProductRoutesGet(db, w, r)
@@ -91,6 +93,7 @@ func main() {
 		}
 	})
 
+	// Gérer les routes des catégories
 	router.HandleFunc("/categories", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			categories.GetAllCategories(db, w)
@@ -101,6 +104,7 @@ func main() {
 		}
 	})
 
+	// Gérer la route des versions de produit
 	router.HandleFunc("/versions", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			products.GetProductVersions(db, w, r)
