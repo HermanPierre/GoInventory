@@ -36,6 +36,7 @@ func getProductByID(productID int, db *sql.DB) (Product, error) {
 		WHERE product_id = ?
 	`
 
+	// Récupération du produit dans la DB
 	row := db.QueryRow(query, productID)
 
 	var product Product
@@ -74,6 +75,7 @@ func getAllProducts(db *sql.DB, categoryParam string) ([]Product, error) {
 	`
 
 	var args []interface{}
+	// Prise en compte du filtre de catégorie
 	if categoryParam != "" {
 		// Si un filtre de catégorie est spécifié, on ajoute une clause WHERE à la requête SQL
 		query += " WHERE p.category_id = ?"

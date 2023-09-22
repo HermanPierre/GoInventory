@@ -64,6 +64,7 @@ func UpdateProduct(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Stockage de la version actuelle du produit
 	if err := AddProductVersion(db, updatedProduct.ProductID); err != nil {
 		http.Error(w, "Erreur lors de l'ajout de la version précédente du produit", http.StatusInternalServerError)
 		return
@@ -75,6 +76,7 @@ func UpdateProduct(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		WHERE product_id = ?
 	`
 
+	// Mise à jour du produit
 	result, err := db.Exec(
 		updateQuery,
 		updatedProduct.Name,
@@ -95,6 +97,7 @@ func UpdateProduct(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Répondre avec le produit mis à jour
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(updatedProduct); err != nil {
 		http.Error(w, "Erreur lors de la sérialisation en JSON du produit mis à jour", http.StatusInternalServerError)
